@@ -32,14 +32,14 @@ RepoDeck divides its responsibilities between a backend running in the **VS Code
 
 ```mermaid
 graph TD
-    subgraph Webview Panels (Preact Frontend)
+    subgraph Webviews ["Webview Panels (Preact Frontend)"]
         BP["Board Panel: Board / Table / Roadmap Views"]
         IP["Issue Panel: Timeline, Comments"]
         PRP["PR Panel: Details, Reviews, CI Status"]
         FP["Form Panels: Create Issue / PR"]
     end
 
-    subgraph VS Code Extension Host
+    subgraph ExtHost ["VS Code Extension Host"]
         EH["Command Registry & Main Controller"]
         ITP["Issues Tree Data Provider"]
         PTP["PR Tree Data Provider"]
@@ -47,12 +47,12 @@ graph TD
         GitCLI["Local Git CLI Wrapper"]
     end
 
-    subgraph GitHub API
+    subgraph GHAPI ["GitHub API"]
         REST["GitHub REST API (Issues, PRs, Refs)"]
         GraphQL["GitHub GraphQL API (Projects v2, Fields)"]
     end
 
-    subgraph Local Environment
+    subgraph LocalEnv ["Local Environment"]
         Workspace["Local Git Workspace Folder"]
     end
 
