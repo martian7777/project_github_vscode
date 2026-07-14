@@ -212,6 +212,10 @@ When generating the token, ensure you check the following permissions:
 
 ## 🛠️ Developer Guide & Contributions
 
+We welcome contributions of all kinds! Please read our **[Contributing Guide](CONTRIBUTING.md)** for detailed instructions on setting up your environment, code standards, and the pull request process.
+
+If you have questions, ideas, or want to discuss the project, join the conversation on the **[RepoDeck Discussions](https://github.com/martian7777/RepoDeck/discussions)** board.
+
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v18+)
 - [Git](https://git-scm.com/)
