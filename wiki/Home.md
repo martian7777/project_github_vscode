@@ -7,6 +7,7 @@ RepoDeck provides:
 - **Robust Authentication**: Session integration or Personal Access Tokens (PAT) stored securely in `SecretStorage`.
 - **Developer Workflows**: One-click repository initializer and automated issue-to-branch setup ("Start Working on Issue").
 - **Performant Detail Panels**: Fast loading via local caching and rich markdown rendering for issue/PR descriptions, comments, and events.
+- **GitHub Actions**: Browse workflow runs, jobs, and steps; re-run or cancel runs; and manage Actions secrets, variables, and environments (with client-side secret encryption) — all from the sidebar.
 
 ---
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.5
+
+- New **GitHub Actions** sidebar view: browse workflow runs for the current branch and per
+  workflow, and drill into jobs and their steps with live status icons.
+- Open any run or job on GitHub, and re-run or cancel runs from the tree.
+- Manage Actions **Secrets** and **Variables** at both repository and environment scope —
+  add, update, and delete. Secret values are encrypted client-side (libsodium sealed box)
+  before upload, so plaintext never leaves your machine.
+
 ## 0.9.4
 
 - Add contributing guide (`CONTRIBUTING.md`).

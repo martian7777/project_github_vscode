@@ -51,6 +51,7 @@ graph TD
         EH["Command Registry & Main Controller"]
         ITP["Issues Tree Data Provider"]
         PTP["PR Tree Data Provider"]
+        ATP["Actions Tree Data Provider"]
         Auth["Auth Manager (SecretStorage/Session)"]
         GitCLI["Local Git CLI Wrapper"]
     end
@@ -71,6 +72,7 @@ graph TD
 
     EH -->|Updates & Sync| ITP
     EH -->|Updates & Sync| PTP
+    EH -->|Updates & Sync| ATP
     EH -->|Retrieve Tokens| Auth
     EH -->|Execute commands| GitCLI
     
@@ -196,6 +198,38 @@ Interact with issues and PRs in rich, responsive webviews:
 
 ---
 
+### ⚡ 5. GitHub Actions
+Monitor and manage your CI/CD without leaving the editor, from a dedicated **GitHub Actions** sidebar view:
+- **Current Branch & Workflows**: Browse recent workflow runs for the branch you have checked out, or grouped under each workflow. Expand a run to see its **jobs**, and each job to see its **steps** (`Set up job`, `Run actions/checkout@v4`, …) with live status icons — green check, red error, spinner for in-progress, and slashed circle for cancelled/skipped.
+- **Open on GitHub**: A globe icon on any run or job opens it on github.com to inspect the full logs.
+- **Re-run & Cancel**: Re-run a completed run or cancel one that is still in progress, straight from the tree.
+- **Secrets & Variables**: Under **Settings**, add, update, and delete **Repository Secrets** and **Repository Variables** — and the same for each **Environment**. Secret values are sealed-box encrypted client-side (via libsodium) against the repository/environment public key before they are ever sent, so plaintext never leaves your machine.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant RD as RepoDeck Extension
+    participant Sodium as libsodium (local)
+    participant GH as GitHub REST API
+
+    Dev->>RD: Expand a workflow run
+    RD->>GH: actions.listJobsForWorkflowRun
+    GH-->>RD: Jobs + embedded steps
+    RD->>Dev: Render jobs → steps with status icons
+
+    Dev->>RD: Add a repository secret (name + value)
+    RD->>GH: actions.getRepoPublicKey
+    GH-->>RD: Public key + key_id
+    RD->>Sodium: crypto_box_seal(value, publicKey)
+    Sodium-->>RD: Encrypted ciphertext
+    RD->>GH: actions.createOrUpdateRepoSecret(encrypted_value, key_id)
+    GH-->>RD: 201/204 Created
+    RD->>Dev: Refresh Actions tree
+```
+
+---
+
 ## 🔑 Authentication Setup
 
 RepoDeck asks the host editor for a GitHub account session first. If the editor does not provide one, RepoDeck prompts you to supply a **Personal Access Token (PAT)**.
@@ -204,7 +238,7 @@ To create a PAT, go to **GitHub Settings > Developer Settings > Personal Access 
 
 ### Required Token Scopes
 When generating the token, ensure you check the following permissions:
-- `repo` — Read/Write repository code, commit history, pull requests, issues, and git refs.
+- `repo` — Read/Write repository code, commit history, pull requests, issues, and git refs. Also grants access to GitHub Actions: workflow runs, jobs, and management of Actions secrets, variables, and environments.
 - `read:org` — List organization memberships to fetch projects and create organization repositories.
 - `project` — Read/Write GitHub Projects (v2). **Without this scope, Projects will be completely inaccessible via GitHub's GraphQL API, returning empty boards.**
 

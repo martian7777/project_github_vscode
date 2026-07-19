@@ -68,3 +68,23 @@ Clicking on an issue or pull request in the sidebar tree or board opens a dedica
 - **Threaded Timeline**: Displays comments, review logs, commits, merges, and status updates in a clean, vertical chronological thread.
 - **CI/CD Status**: Pull request details fetch and report automated test checks and commit statuses (success, failure, pending).
 - **PR Management**: Directly merge PRs (via merge commit, squash, or rebase), mark drafts as "Ready for Review", close or reopen items, and delete merged remote branches from a single dashboard.
+
+---
+
+## 6. GitHub Actions
+
+A dedicated **GitHub Actions** sidebar view brings CI/CD monitoring and configuration into the editor, organized into three sections:
+
+### A. Current Branch & Workflows
+- **Run History**: Lists recent workflow runs for the branch you currently have checked out, and — under the **Workflows** section — grouped beneath each workflow file.
+- **Drill-Down**: Expand any run to reveal its **jobs**, and expand a job to reveal its individual **steps** (e.g. `Set up job`, `Run npm ci`, `Run npm run build`). Each level shows a status icon: a green check for success, a red error for failure, a spinner for in-progress/queued, and a slashed circle for cancelled or skipped.
+- **Open on GitHub**: A globe icon on a run or job opens it directly on github.com to inspect the complete logs.
+- **Run Controls**: Re-run a completed workflow run, or cancel one that is still in progress, from inline actions on the tree.
+
+### B. Environments, Secrets & Variables
+Under the **Settings** section, RepoDeck manages Actions configuration end-to-end against the GitHub REST API:
+- **Repository Secrets & Variables**: Add, update, and delete repository-level secrets and variables. Names are validated against GitHub's rules (letters, digits, underscores; the reserved `GITHUB_` prefix is rejected).
+- **Environments**: Each environment is listed with its own **Secrets** and **Variables** sub-groups, supporting the same add/update/delete operations scoped to that environment.
+- **Client-Side Encryption**: GitHub only accepts secret values that have been sealed against the target's public key. RepoDeck fetches that public key, encrypts the value locally using **libsodium** (`crypto_box_seal`), and uploads only the ciphertext — the plaintext secret never leaves your machine, and GitHub never returns existing secret values, so an "update" always replaces the value with a fresh entry.
+
+> **Permissions**: Reading runs and managing secrets/variables/environments is covered by the token's `repo` scope. If a token lacks the necessary admin rights, RepoDeck surfaces a clear message rather than failing silently.
